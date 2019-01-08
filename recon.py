@@ -297,7 +297,7 @@ def subdomainfile():
         os.remove(massdnsFileName)
         print("\n{} Subdomains discovered by massdns".format(subdomainCounter))
     except:
-    print("\nError Opening massdns File!\n")
+		print("\nError Opening massdns File!\n")
     print("\nOpening Subfinder File\n")
     try:
         with open(SubfinderFileName) as f:
