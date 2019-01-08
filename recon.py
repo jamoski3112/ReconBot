@@ -211,7 +211,7 @@ def nmap():
     urls = [url.split('/')[0] for url in lines.split()]
     nmap_file.write('\n'.join(urls))
     nmap_file.close()
-    nmapCmd= 'nmap -Pn -p- --open -iL '+output_base+'-nmap-list.txt -oG '+output_base+'-nmap-result'
+    nmapCmd= 'nmap -Pn -p- -sV --open -iL '+output_base+'-nmap-list.txt -oG '+output_base+'-nmap-result'
     os.system(nmapCmd)
     unwanted=['/open/tcp//']
     nmap_filter = open(output_base+'-nmap-result', 'r')
