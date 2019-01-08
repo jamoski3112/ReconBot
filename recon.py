@@ -83,6 +83,7 @@ def installTools():
     subfinInstall=("git clone https://github.com/Ice3man543/subfinder.git ./bin/subfinder")
     os.system(subfinInstall)
     subfinReq=("chmod +x /bin/subfinder/build.sh && ./build.sh")
+    os.system(subfinReq)
     print("Installed Subfinder")
 
     print("\n\033[1;31mInstalling Takeover \033[1;37m")
@@ -231,7 +232,7 @@ def nmap():
     slack.chat.post_message("#nmap",domain+" nmap results\n")
     slack.chat.post_message("#nmap","``` ".join(nmap_filteroutput)+" ```")
     nmap_filter1.close()
-    os.system('rm'+output_base+'demofile.txt')
+    os.system('rm '+output_base+'demofile.txt')
     time.sleep(1)
 
 def push_notification():
@@ -256,7 +257,7 @@ def subdomainfile():
     AmassFileName = "{}_amass.txt".format(output_base)
     SubfinderFileName="{}_subfinder.txt".format(output_base)
     subdomainAllFile = "{}-all.txt".format(output_base)
-    massdnsFileName = "{}-massdns.txt".format(output_base)
+    #massdnsFileName = "{}-massdns.txt".format(output_base)
     knockpyFileName = "{}_knock.csv.txt".format(output_base)
     f1 = open(subdomainAllFile, "w")
     f1.close()
@@ -278,7 +279,7 @@ def subdomainfile():
         print("\n{} Subdomains discovered by Amass".format(subdomainCounter))
     except:
         print("\nError Opening Amass File!\n")
-    print("\nOpening massdns File\n")
+    '''print("\nOpening massdns File\n")
     try:
         with open(massdnsFileName) as f:
             SubHosts = f.read().splitlines()
@@ -297,7 +298,7 @@ def subdomainfile():
         os.remove(massdnsFileName)
         print("\n{} Subdomains discovered by massdns".format(subdomainCounter))
     except:
-		print("\nError Opening massdns File!\n")
+		print("\nError Opening massdns File!\n")'''
     print("\nOpening Subfinder File\n")
     try:
         with open(SubfinderFileName) as f:
