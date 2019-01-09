@@ -190,7 +190,7 @@ def dirsearch():
 	with open('output'/+domain+'-dirsearch.txt','r') as dirf:
 		for url in dirf.readline():
 			output=url.strip()
-            slack.chat.post_message("#dirsearch","```"+output+"```")
+			slack.chat.post_message("#dirsearch","```"+output+"```")
     time.sleep(1)
 def subdomain_takeover():
     print("\n\n\033[1;31mRunning Takeover  \n\033[1;37m")
