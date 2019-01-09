@@ -184,9 +184,12 @@ def dirsearch():
             req = url.strip()
             # print req
             path=os.path.join(script_path,'bin/dirsearch/dirsearch.py')
-            proc = subprocess.Popen(["python3",path,"-u",req,"-e","*","-x","403,500,301"], stdout=subprocess.PIPE)
-            output = proc.stdout.read()
-            print output
+            proc = subprocess.Popen(["python3",path,"-u",req,"-e","*","-x","403,500,301","--plain-text-report={}-dirsearch.txt".format(domain)], stdout=subprocess.PIPE)
+            #output = proc.stdout.read()
+            #print output
+	with open('output'/+domain+'-dirsearch.txt','r') as dirf:
+		for url in dirf.readline():
+			output=url.strip()
             slack.chat.post_message("#dirsearch","```"+output+"```")
     time.sleep(1)
 def subdomain_takeover():
