@@ -17,7 +17,7 @@ timeout = 10
 __author__      = "Rahul R"
 __github__      = "https://github.com/rahulr311295"
 
-slack = Slacker('xoxb-518875028946-518875829938-lRDWnbLTEpkxHyvJ3Lsk8wZx')
+slack = Slacker('Slack Token')
 
 def get_args():
     parser = argparse.ArgumentParser(
