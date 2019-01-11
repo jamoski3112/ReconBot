@@ -17,7 +17,7 @@ timeout = 10
 __author__      = "Rahul R"
 __github__      = "https://github.com/rahulr311295"
 
-slack = Slacker('Slack BOT Token Here')
+slack = Slacker('xoxb-518875028946-518875829938-lRDWnbLTEpkxHyvJ3Lsk8wZx')
 
 def get_args():
     parser = argparse.ArgumentParser(
@@ -37,7 +37,7 @@ dom=[]
 nmap_filteroutput=[]
 #==================================================================================================================    
 def banner():
-    print("""\33[92m
+	print("""\33[92m
     _|_|_|                                        _|                            _|  
     _|    _|    _|_|    _|_|_|  _|_|      _|_|_|      _|_|_|      _|_|      _|_|_|  
     _|    _|  _|    _|  _|    _|    _|  _|    _|  _|  _|    _|  _|_|_|_|  _|    _|  
@@ -176,29 +176,29 @@ def knockpy():
         print("\nKnock File Error\n")
     time.sleep(1)
 
-def dirsearch():
-    print("\n\n\033[1;31mRunning dirsearch  \n\033[1;37m")
-    with open('output/'+domain+'-alive.txt','r') as http:
-        for url in http.readlines():
-            req = url.strip()
-            # print req
-            path=os.path.join(script_path,'bin/dirsearch/dirsearch.py')
-            proc = subprocess.Popen(["python3",path,"-u",req,"-e","*","-x","403,500,301"], stdout=subprocess.PIPE)
-            output = proc.stdout.read()
-            print output
-            slack.chat.post_message("#dirsearch","```"+output+"```")
-    time.sleep(1)
+def gobuster():
+	print("\n\n\033[1;31mRunning dirsearch  \n\033[1;37m")
+	with open('output/'+domain+'-alive.txt','r') as http:
+		for url in http.readlines():
+			req = url.strip()
+			# print req
+			path=os.path.join(script_path,'bin/dirsearch/dirsearch.py')
+			proc = subprocess.Popen(["python3",path,"-u",req,"-e","*","-x","403,500,301"], stdout=subprocess.PIPE)
+			output = proc.stdout.read()
+			print output
+			slack.chat.post_message("#dirsearch","```"+output+"```")
+	time.sleep(1)
 def subdomain_takeover():
-    print("\n\n\033[1;31mRunning Takeover  \n\033[1;37m")
-    takeoverCmd = "python {} --sub-domain-list {}-unique.txt --set-output {}-takeover_out.txt".format(os.path.join(script_path,'bin/takeover/takeover.py'),output_base,output_base)
-    os.system(takeoverCmd)
-    time.sleep(1)
-    with open(output_base+"-takeover_out.txt", "r") as takeover:
-        takeover_lines=takeover.readlines()
-        if os.stat(output_base+"-takeover_out.txt").st_size != 0:
-            slack.chat.post_message('#takeover','Potential Subdomain Takeover \n```'+str(takeover_lines).strip()+'```')
-        else:
-            print("None")
+	print("\n\n\033[1;31mRunning Takeover  \n\033[1;37m")
+	takeoverCmd = "python {} --sub-domain-list {}-unique.txt --set-output {}-takeover_out.txt".format(os.path.join(script_path,'bin/takeover/takeover.py'),output_base,output_base)
+	os.system(takeoverCmd)
+	time.sleep(1)
+	with open(output_base+"-takeover_out.txt", "r") as takeover:
+		takeover_lines=takeover.readlines()
+		if os.stat(output_base+"-takeover_out.txt").st_size != 0:
+			slack.chat.post_message('#takeover','Potential Subdomain Takeover \n```'+str(takeover_lines).strip()+'```')
+		else:
+			print("None")
 
 
 def nmap():
@@ -211,18 +211,23 @@ def nmap():
     urls = [url.split('/')[0] for url in lines.split()]
     nmap_file.write('\n'.join(urls))
     nmap_file.close()
-    nmapCmd= 'nmap -Pn -p- --open -iL '+output_base+'-nmap-list.txt -oG '+output_base+'-nmap-result'
-    os.system(nmapCmd)
+    nmaplist = output_base+'-nmap-list.txt'
+    nmapout = output_base+'-nmap-result'
+    proc = subprocess.Popen(["nmap","-Pn","-p-","--open","-iL",nmaplist,"-oG",nmapout],stdout=subprocess.PIPE)
+    output = proc.stdout.read()
+    slack.chat.post_message("#nmap_stdout","```"+output+"```")
+    # nmapCmd= 'nmap -Pn -p- --open -iL '+output_base+'-nmap-list.txt -oG '+output_base+'-nmap-result'
+    # os.system(nmapCmd)
     unwanted=['/open/tcp//']
     nmap_filter = open(output_base+'-nmap-result', 'r')
     regex = re.compile(r'[0-9]*\/open\/tcp\/\/')
-    f = open(output_base+"demofile.txt", "w")
+    f = open(output_base+"-demofile.txt", "w")
     for line in nmap_filter:
         nmap_domains = regex.findall(line)
         for word in nmap_domains:
             f.write(line[5:18].lstrip()+':'+word+'\n')
     f.close()
-    with open(output_base+"demofile.txt", "r") as nmap_filter1:
+    with open(output_base+"-demofile.txt", "r") as nmap_filter1:
         for line in nmap_filter1:
             # print line.strip()
             for word in unwanted:
@@ -231,26 +236,26 @@ def nmap():
     slack.chat.post_message("#nmap",domain+" nmap results\n")
     slack.chat.post_message("#nmap","``` ".join(nmap_filteroutput)+" ```")
     nmap_filter1.close()
-    os.system('rm'+output_base+'demofile.txt')
+    os.system('rm '+output_base+'-demofile.txt')
     time.sleep(1)
 
 def push_notification():
-    unique_doms=open('output/'+domain+'-alive.txt', 'w')
-    with open(output_base+'-unique.txt','r') as g:
-        for url in g.readlines():
-            lines = url.strip()
-            try:
-                response = os.system("curl --write-out %{http_code} --silent --output /dev/null -m 5 " + lines)
-                if response == 000:
-                    print (" "+lines+" is Up")
-                    dom.append(lines)
-                    unique_doms.write(lines+"\n")
-                else:
-                    print(lines)
-            except requests.exceptions.Timeout:
-                print ("Error")
-        slack.chat.post_message("#recon","Subdomains from "+domain+" \n")
-        slack.chat.post_message("#recon","``` ".join(dom)+" ```\n")
+	unique_doms=open('output/'+domain+'-alive.txt', 'w')
+	with open(output_base+'-unique.txt','r') as g:
+		for url in g.readlines():
+			lines = url.strip()
+			try:
+				response = os.system("curl --write-out %{http_code} --silent --output /dev/null -m 5 " + lines)
+				if response == 000:
+					print (" "+lines+" is Up")
+					dom.append(lines)
+					unique_doms.write(lines+"\n")
+				else:
+					print(lines)
+			except requests.exceptions.Timeout:
+				print ("Error")
+    	slack.chat.post_message("#recon","Subdomains from "+domain+" \n")
+    	slack.chat.post_message("#recon","``` ".join(dom)+" ```\n")
     # time.sleep(1)
 def subdomainfile():
     AmassFileName = "{}_amass.txt".format(output_base)
@@ -288,7 +293,7 @@ def subdomainfile():
         f1 = open(subdomainAllFile, "a")
         f1.writelines("\n\nmassdns")
         for hosts in SubHosts:
-            hosts = hosts.split(".  ")[0]
+            hosts = hosts.split(".	")[0]
             if domain in hosts:
                 hosts = "".join(hosts)
                 f1.writelines("\n" + hosts)
@@ -297,7 +302,7 @@ def subdomainfile():
         os.remove(massdnsFileName)
         print("\n{} Subdomains discovered by massdns".format(subdomainCounter))
     except:
-    print("\nError Opening massdns File!\n")
+	print("\nError Opening massdns File!\n")
     print("\nOpening Subfinder File\n")
     try:
         with open(SubfinderFileName) as f:
@@ -355,6 +360,7 @@ if __name__ == "__main__":
     args = get_args()
     domain = args.domain
     install = args.install
+    update = args.update
     output_base = "output/{}".format(domain)
     if install:
         installTools()
@@ -367,11 +373,11 @@ if __name__ == "__main__":
             push_notification()
             nmap()
             subdomain_takeover()
-            dirsearch()
+            gobuster()
     elif update:
-        installTools()
+    	installTools()
             
     else:
         print("Something Went Wrong......!\nAnd You are Stupid")
     print("Done Scanning "+domain+" ...")
-            
+			
