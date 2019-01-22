@@ -25,6 +25,10 @@ def get_args():
     parser.add_argument(
         '-d', '--domain', type=str, help='Domain', required=False, default=False)
     parser.add_argument(
+         '--gobuster', help='Send gobuster output to Slack', action="store_true", default=False)
+    parser.add_argument(
+         '--nmap',  help='Send Nmap Result to Slack', action="store_true", default=False)
+    parser.add_argument(
         '--install', help='Install', action='store_true', default=False)
     parser.add_argument(
         '--update', help='Update', action='store_true', default=False)
@@ -56,6 +60,15 @@ def installTools():
     print('Changing into domained home: {}'.format(script_path))
     os.chdir(script_path)
     print("Installing")
+    goInstall=("sudo apt install -y golang")
+    goInstall1=("echo 'export PATH=$PATH:/usr/local/go/bin' | sudo tee -a /etc/profile && \
+                 echo 'export GOPATH=$HOME/go' | tee -a $HOME/.bashrc && \
+                 echo 'export PATH=$PATH:$GOROOT/bin:$GOPATH/bin' | tee -a $HOME/.bashrc && \
+                 mkdir -p $HOME/go/src && \
+                 mkdir -p $HOME/go/pkg && \
+                 mkdir -p $HOME/go/bin")
+    os.system(goInstall)
+    os.system(goInstall1)
     # ============================== Amass =================================
     print("\n\033[1;31mInstalling Amass \033[1;37m")
     amassInstall=("git clone https://github.com/OWASP/Amass.git ./bin/Amass")
@@ -80,15 +93,19 @@ def installTools():
 
     # ==================================== Subfinder =======================================
     print("\n\033[1;31mInstalling Subfinder \033[1;37m")
-    subfinInstall=("git clone https://github.com/Ice3man543/subfinder.git ./bin/subfinder")
+    subfinInstall=("git clone https://github.com/subfinder/subfinder.git ./bin/subfinder")
     os.system(subfinInstall)
     subfinReq=("chmod +x /bin/subfinder/build.sh && ./build.sh")
     print("Installed Subfinder")
 
     print("\n\033[1;31mInstalling Takeover \033[1;37m")
-    takeoverInstall=("git clone https://github.com/m4ll0k/takeover.git ./bin/takeover")
+    # takeoverInstall=("git clone https://github.com/m4ll0k/takeover.git ./bin/takeover")
+    # os.system(takeoverInstall)
+
+    takeoverInstall=("go get github.com/haccer/subjack")
     os.system(takeoverInstall)
     print("Installed Takeover")
+
 
 
     knockpyUpgrade = "git clone https://github.com/guelfoweb/knock.git ./bin/knockpy"
@@ -97,20 +114,20 @@ def installTools():
     print("\nKnockpy Installed\n")
 
 
-    # SLsublstUpgrade= "wget -O bin/all.txt https://gist.githubusercontent.com/jhaddix/86a06c5dc309d08580a018c66354a056/raw/96f4e51d96b2203f19f6381c8c545b278eaa0837/all.txt"
-    # print("\nHaddix Domain List Installed\n")
-    # os.system(SLsublstUpgrade)
-    # subbruteUpgrade = "git clone https://github.com/TheRook/subbrute.git ./bin/subbrute"
-    # print("\n\033[1;31mInstalling Subbrute \033[1;37m")
-    # os.system(subbruteUpgrade)
-    # print("\nSubbrute Installed\n")
-    # massdnsUpgrade = "git clone https://github.com/blechschmidt/massdns ./bin/massdns"
-    # print("\n\033[1;31mInstalling massdns \033[1;37m")
-    # os.system(massdnsUpgrade)
-    # massdnsMake = "make -C ./bin/massdns"
-    # os.system(massdnsMake)
-    # print("\nMassdns Installed\n")
-    # os.system("cp ./bin/subbrute/resolvers.txt ./")
+    SLsublstUpgrade= "wget -O bin/all.txt https://gist.githubusercontent.com/jhaddix/86a06c5dc309d08580a018c66354a056/raw/96f4e51d96b2203f19f6381c8c545b278eaa0837/all.txt"
+    print("\nHaddix Domain List Installed\n")
+    os.system(SLsublstUpgrade)
+    subbruteUpgrade = "git clone https://github.com/TheRook/subbrute.git ./bin/subbrute"
+    print("\n\033[1;31mInstalling Subbrute \033[1;37m")
+    os.system(subbruteUpgrade)
+    print("\nSubbrute Installed\n")
+    massdnsUpgrade = "git clone https://github.com/blechschmidt/massdns ./bin/massdns"
+    print("\n\033[1;31mInstalling massdns \033[1;37m")
+    os.system(massdnsUpgrade)
+    massdnsMake = "make -C ./bin/massdns"
+    os.system(massdnsMake)
+    print("\nMassdns Installed\n")
+    os.system("cp ./bin/subbrute/resolvers.txt ./")
     
 # ----------------------------------------INSTALLATION ENDS HERE------------------------------------------------------
 
@@ -133,21 +150,21 @@ def subfinder():
     print("\n\033[1;31mSubfinder Complete\033[1;37m")
     time.sleep(1)
 
-# def massdns():
-#     print("\n\n\033[1;31mRunning massdns \n\033[1;37m")
-#     word_file = os.path.join(
-#         script_path, "bin/all.txt")
-#     massdnsCMD = "python {}  {} {} | {} -r {} -t A -o S -w {}-massdns.txt".format(
-#         os.path.join(script_path, "bin/massdns/scripts/subbrute.py"),
-#         word_file,
-#         domain,
-#         os.path.join(script_path, "bin/massdns/bin/massdns"),os.path.join(script_path, "bin/massdns/lists/resolvers.txt"),
-#         output_base
-#     )
-#     print("\n\033[1;31mRunning Command: \033[1;37m{}".format(massdnsCMD))
-#     os.system(massdnsCMD)
-#     print("\n\033[1;31mMasscan Complete\033[1;37m")
-#     time.sleep(1)
+def massdns():
+    print("\n\n\033[1;31mRunning massdns \n\033[1;37m")
+    word_file = os.path.join(
+        script_path, "bin/all.txt")
+    massdnsCMD = "python {}  {} {} | {} -r {} -t A -o S -w {}-massdns.txt".format(
+        os.path.join(script_path, "bin/massdns/scripts/subbrute.py"),
+        word_file,
+        domain,
+        os.path.join(script_path, "bin/massdns/bin/massdns"),os.path.join(script_path, "bin/massdns/lists/resolvers.txt"),
+        output_base
+    )
+    print("\n\033[1;31mRunning Command: \033[1;37m{}".format(massdnsCMD))
+    os.system(massdnsCMD)
+    print("\n\033[1;31mMasscan Complete\033[1;37m")
+    time.sleep(1)
 
 def knockpy():
     print("\n\n\033[1;31mRunning Knock \n\033[1;37m")
@@ -189,16 +206,18 @@ def gobuster():
 			slack.chat.post_message("#dirsearch","```"+output+"```")
 	time.sleep(1)
 def subdomain_takeover():
-	print("\n\n\033[1;31mRunning Takeover  \n\033[1;37m")
-	takeoverCmd = "python {} --sub-domain-list {}-unique.txt --set-output {}-takeover_out.txt".format(os.path.join(script_path,'bin/takeover/takeover.py'),output_base,output_base)
-	os.system(takeoverCmd)
-	time.sleep(1)
-	with open(output_base+"-takeover_out.txt", "r") as takeover:
-		takeover_lines=takeover.readlines()
-		if os.stat(output_base+"-takeover_out.txt").st_size != 0:
-			slack.chat.post_message('#takeover','Potential Subdomain Takeover \n```'+str(takeover_lines).strip()+'```')
-		else:
-			print("None")
+    print("\n\n\033[1;31mRunning Takeover  \n\033[1;37m")
+    f = open(output_base+"-takeover_out.txt", "w")
+    f.close()
+    takeoverCmd = "subjack -w {}-unique.txt -t 100 -timeout 30 -o {}-takeover_out.txt".format(output_base,output_base)
+    os.system(takeoverCmd)
+    time.sleep(1)
+    with open(output_base+"-takeover_out.txt", "r") as takeover:
+        takeover_lines=takeover.readlines()
+        if os.stat(output_base+"-takeover_out.txt").st_size != 0:
+            slack.chat.post_message('#takeover','Potential Subdomain Takeover \n```'+str(takeover_lines).strip()+'```')
+        else:
+            print("None")
 
 
 def nmap():
@@ -354,30 +373,38 @@ def subdomainfile():
     uniqueDomainsOut.close()
     time.sleep(1)
     rootdomainStrip = domain.replace(".", "_")
+
+def options():
+        if install:
+            installTools()
+        elif domain:
+            amass()
+            subfinder()
+            knockpy()
+            massdns()
+            subdomainfile()
+            push_notification()
+            subdomain_takeover()
+        elif gobuster:
+            gobuster()
+        elif nmap:
+            nmap()
+        elif update:
+            installTools()
+                
+        else:
+            print("Something Went Wrong......!\nAnd You are Stupid")
+        print("Done Scanning "+domain+" ...")
+
 if __name__ == "__main__":
     banner()
     script_path = os.path.dirname(os.path.realpath(__file__))
     args = get_args()
     domain = args.domain
+    gobuster = args.gobuster
+    nmap = args.nmap
     install = args.install
     update = args.update
     output_base = "output/{}".format(domain)
-    if install:
-        installTools()
-    elif domain:
-            amass()
-            subfinder()
-            knockpy()
-            # massdns()
-            subdomainfile()
-            push_notification()
-            nmap()
-            subdomain_takeover()
-            gobuster()
-    elif update:
-    	installTools()
-            
-    else:
-        print("Something Went Wrong......!\nAnd You are Stupid")
-    print("Done Scanning "+domain+" ...")
+    options()
 			
