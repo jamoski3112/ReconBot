@@ -93,9 +93,8 @@ def installTools():
 
     # ==================================== Subfinder =======================================
     print("\n\033[1;31mInstalling Subfinder \033[1;37m")
-    subfinInstall=("git clone https://github.com/subfinder/subfinder.git ./bin/subfinder")
+    subfinInstall=("go get github.com/subfinder/subfinder")
     os.system(subfinInstall)
-    subfinReq=("chmod +x /bin/subfinder/build.sh && ./build.sh")
     print("Installed Subfinder")
 
     print("\n\033[1;31mInstalling Takeover \033[1;37m")
