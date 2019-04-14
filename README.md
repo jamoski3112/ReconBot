@@ -19,6 +19,7 @@ Generally domains extracted from crt.sh maynot resolve using Zombie module it pe
 ### Database Model
 
 ![db_model](flowdiagram/Database_Workflow.png)
+
 Usage
 
     RELEASING SOON
