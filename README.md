@@ -29,6 +29,7 @@ Todo
  - [ ] Reliable Subdomain Takeover Scanner
  - [ ] Formatted Slack Output
  - [ ] BandWidth Optimization
+ - [ ] Database Schema and Development
 
 
  
