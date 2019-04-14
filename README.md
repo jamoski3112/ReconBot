@@ -16,10 +16,12 @@ Generally domains extracted from crt.sh maynot resolve using Zombie module it pe
 
 ![zombiemodule](flowdiagram/ZombieModule.png)
 
+### Database Model
+
+![db_model](flowdiagram/Database_Workflow.png)
 Usage
 
-    python recon.py --install
-    python recon.py -d example.com
+    RELEASING SOON
    Slack Bot Token is needed
 
 
