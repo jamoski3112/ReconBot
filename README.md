@@ -1,7 +1,20 @@
-## Bounty Machine
+# ReconBot V2
+## Workflow
 
-Workflow
-![workflow](https://user-images.githubusercontent.com/21986177/50814892-34bb4180-1341-11e9-905d-af1c75f6af59.png)
+### ReconBot
+
+![reconbot](flowdiagram/ReconBot_v2.png)
+
+### Monitor Module
+Monitor Module fetches domain name from database and checks if a new domain is available using crt.sh and does the nessary operations.
+
+![monitormodule](flowdiagram/Monitor_Module.png)
+
+### Zombie Module
+
+Generally domains extracted from crt.sh maynot resolve using Zombie module it periodically checks if the domain names in the database are alive and if it is alive does the nessary actions
+
+![zombiemodule](flowdiagram/ZombieModule.png)
 
 Usage
 
@@ -14,10 +27,8 @@ Todo
 
  - [ ] Multi Threading
  - [ ] Reliable Subdomain Takeover Scanner
- - [ ] More Ideas CI/CD
  - [ ] Formatted Slack Output
- - [x] Remote Execution From Server
- - [ ] MassDns Fix
  - [ ] BandWidth Optimization
 
 
+ 
