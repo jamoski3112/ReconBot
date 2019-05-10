@@ -110,17 +110,21 @@ class persistence_modules:
 		
 	def zombie(self):
 		global table_out
-		global domain
 		cursor.execute("USE recon;")
 		cursor.execute("SHOW TABLES;")
+                lst=[]
 		for table_name in cursor:
-			domain=''.join(table_name)
-			print(domain)
-			state="""SELECT `subdomain` from `%s` WHERE is_alive=0 """%(domain)
-			out=cursor.execute(state)
-			result=cursor.fetchall()
-			for records in result:
-				table_out=''.join(records)
+			 domain=lst.append(table_name)
+                i=0
+	        while i<=len(lst)-1:
+                         state="""SELECT `subdomain` from `%s` WHERE is_alive=0 """%(lst[i])
+                         out=cursor.execute(state)
+                         result=cursor.fetchall()
+                         i+=1
+                         for records in result:
+                          table_out=''.join(records)
+                          print(table_out)
+                          db.commit()
 				# print(domain)
 				# if os.system("ping -c 1 " + table_out) is 0:
 				# 	sql="""UPDATE `%s` SET `is_alive` = True WHERE `subdomain` = '%s' ;"""%(domain,table_out)
