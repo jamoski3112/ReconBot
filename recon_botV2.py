@@ -13,6 +13,7 @@ import re
 import json
 from tld import get_fld
 import urllib3
+from requests.exceptions import HTTPError
 urllib3.disable_warnings()
 # Mysql Connection
 import pymysql
@@ -110,23 +111,40 @@ class persistence_modules:
 		
 	def zombie(self):
 		global table_out
+		global domain
+		global i
 		cursor.execute("USE recon;")
 		cursor.execute("SHOW TABLES;")
-                lst=[]
+		lst=[]
 		for table_name in cursor:
 			 domain=lst.append(table_name)
-                i=0
-	        while i<=len(lst)-1:
-                         state="""SELECT `subdomain` from `%s` WHERE is_alive=0 """%(lst[i])
-                         out=cursor.execute(state)
-                         result=cursor.fetchall()
-                         i+=1
-                         for records in result:
-                          table_out=''.join(records)
-                          print(table_out)
-                          db.commit()
-				# print(domain)
-				# if os.system("ping -c 1 " + table_out) is 0:
+			 print(domain)
+			 i=0
+			 while i<=len(lst)-1:
+				 state="""SELECT `subdomain` from `%s` WHERE is_alive=0 """%(lst[i])
+				 out=cursor.execute(state)
+				 result=cursor.fetchall()
+				 i+=1
+				 for records in result:
+					 table_out=''.join(records)
+					 print(table_out)
+					 db.commit()
+					 try:
+						 response=requests.get("http://"+table_out)
+						 response.raise_for_status()
+						 if response.status_code == 200:
+							 sql="""UPDATE `%s` SET `is_alive` = True WHERE `subdomain` = '%s' ;"""%(lst[i],table_out)
+							 cursor.execute(sql)
+						 elif response.status_code == 301 or response.status_code == 302 or response.status_code == 500:
+							 print("301 & 302")
+						 elif response.status_code == 500:
+							 print("500")
+						 else :
+							 pass
+					 except Exception as err:
+						 print(f'Other error occurred: {err}')
+
+
 				# 	sql="""UPDATE `%s` SET `is_alive` = True WHERE `subdomain` = '%s' ;"""%(domain,table_out)
 				# 	cursor.execute(sql)
 				# 	print("\n Updated")
