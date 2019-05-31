@@ -111,17 +111,17 @@ class persistence_modules:
 		
 	def zombie(self):
 		global table_out
-		global domain
 		global i
 		cursor.execute("USE recon;")
 		cursor.execute("SHOW TABLES;")
 		lst=[]
 		for table_name in cursor:
-			 domain=lst.append(table_name)
+			 lst.append(table_name)
+			 domain=lst[0][0]
 			 print(domain)
 			 i=0
 			 while i<=len(lst)-1:
-				 state="""SELECT `subdomain` from `%s` WHERE is_alive=0 """%(lst[i])
+				 state="""SELECT `subdomain` from `%s` WHERE is_alive=0 """%(domain)
 				 out=cursor.execute(state)
 				 result=cursor.fetchall()
 				 i+=1
@@ -133,7 +133,7 @@ class persistence_modules:
 						 response=requests.get("http://"+table_out)
 						 response.raise_for_status()
 						 if response.status_code == 200:
-							 sql="""UPDATE `%s` SET `is_alive` = True WHERE `subdomain` = '%s' ;"""%(lst[i],table_out)
+							 sql="""UPDATE `%s` SET `is_alive` = True WHERE `subdomain` = '%s' ;"""%(domain,table_out)
 							 cursor.execute(sql)
 						 elif response.status_code == 301 or response.status_code == 302 or response.status_code == 500:
 							 print("301 & 302")
@@ -346,6 +346,8 @@ class post_recon:
 if __name__ == "__main__":
 	banner()
 	script_path = os.path.dirname(os.path.realpath(__file__))
+	monitor_func=persistence_modules()
+	monitor_func.zombie()
 	args = get_args()
 	brute=args.brute
 	domain = args.domain
