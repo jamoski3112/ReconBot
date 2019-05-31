@@ -346,8 +346,8 @@ class post_recon:
 if __name__ == "__main__":
 	banner()
 	script_path = os.path.dirname(os.path.realpath(__file__))
-	monitor_func=persistence_modules()
-	monitor_func.zombie()
+	# monitor_func=persistence_modules()
+	# monitor_func.zombie()
 	args = get_args()
 	brute=args.brute
 	domain = args.domain
