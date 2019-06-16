@@ -13,22 +13,15 @@ def installTools():
     os.chdir(script_path)
     print("Installing")
     goInstall=("sudo apt install -y golang")
-    goInstall1=("echo 'export PATH=$PATH:/usr/local/go/bin' | sudo tee -a /etc/profile && \
-                 echo 'export GOPATH=$HOME/go' | tee -a $HOME/.bashrc && \
-                 echo 'export PATH=$PATH:$GOROOT/bin:$GOPATH/bin' | tee -a $HOME/.bashrc && \
-                 mkdir -p $HOME/go/src && \
-                 mkdir -p $HOME/go/pkg && \
-                 mkdir -p $HOME/go/bin")
     os.system(goInstall)
-    os.system(goInstall1)
+    
     # ============================== Amass =================================
     print("\n\033[1;31mInstalling Amass \033[1;37m")
-    amaInstallReq = ("sudo apt install -y snapd;sudo systemctl start snapd")
+    amaInstallReq = ("go get -u -v github.com/OWASP/Amass/...")
     os.system(amaInstallReq)
-    amaExport=("export PATH=$PATH:/snap/bin")
+    amaExport=("cd $GOPATH/src/github.com/OWASP/Amass && go install ./...")
     os.system(amaExport)
-    amaInstall=("sudo snap install  amass")
-    os.system(amaInstall)
+    
     print("Amass Installed\n")
 
     # ==================================== Subfinder =======================================
