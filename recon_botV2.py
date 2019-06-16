@@ -110,52 +110,33 @@ class persistence_modules:
 
 		
 	def zombie(self):
-		global table_out
-		global i
-		cursor.execute("USE recon;")
-		cursor.execute("SHOW TABLES;")
-		lst=[]
-		for table_name in cursor:
-			 lst.append(table_name)
-			 domain=lst[0][0]
-			 print(domain)
-			 i=0
-			 while i<=len(lst)-1:
-				 state="""SELECT `subdomain` from `%s` WHERE is_alive=0 """%(domain)
-				 out=cursor.execute(state)
-				 result=cursor.fetchall()
-				 i+=1
-				 for records in result:
-					 table_out=''.join(records)
-					 print(table_out)
-					 db.commit()
-					 try:
-						 response=requests.get("http://"+table_out)
-						 response.raise_for_status()
-						 if response.status_code == 200:
-							 sql="""UPDATE `%s` SET `is_alive` = True WHERE `subdomain` = '%s' ;"""%(domain,table_out)
-							 cursor.execute(sql)
-						 elif response.status_code == 301 or response.status_code == 302 or response.status_code == 500:
-							 print("301 & 302")
-						 elif response.status_code == 500:
-							 print("500")
-						 else :
-							 pass
-					 except Exception as err:
-						 print(f'Other error occurred: {err}')
+		cursor.execute("USE recon")
+		cursor.execute("SHOW TABLES")
+		result=cursor.fetchall()
+		for records in result:
+			domain_name=''.join(records)
+			state="""SELECT `subdomain` from `%s` WHERE is_alive=0 """%(domain_name)
+			try:
+				cursor.execute(state)
+				results = cursor.fetchall()
+				for row in results:
+					subdomain_name=''.join(row)
+					try:
+						response=requests.get("http://"+subdomain_name,timeout=(5, 27))
+						response.raise_for_status()
+						if response.status_code == 200 or response.status_code == 301 or response.status_code == 302:
+							sql="""UPDATE `%s` SET `is_alive` = True WHERE `subdomain` = '%s' ;"""%(domain_name,subdomain_name)
+							cursor.execute(sql)
+							aquatone="""echo {} | aquatone -out /var/www/html/{}""".format(subdomain_name,domain_name)
+							os.system(aquatone)
+						else :
+							pass
+					except Exception as err:
+						print("Cant connect to Host "+subdomain_name)
+			except:
+				print("Zombie Died")
+				db.close()
 
-
-				# 	sql="""UPDATE `%s` SET `is_alive` = True WHERE `subdomain` = '%s' ;"""%(domain,table_out)
-				# 	cursor.execute(sql)
-				# 	print("\n Updated")
-				# else:
-				# 	print("Nothing to Update")
-			# print(domain)
-				
-		# sql="SELECT subdomain from %s WHERE is_alive=0;"
-		# records=cursor.execute(sql,(domain))
-		# print(records)
-	
 
 
 
@@ -313,20 +294,19 @@ class recon:
 		uniqueDomainsOut.close()
 		time.sleep(1)
 		rootdomainStrip = domain.replace(".", "_")
-	def eyewitness(self,filename):
-		EWHTTPSscriptIPS= "python {} -f {} {} --no-prompt --web -d {}-{}-EW".format(os.path.join(script_path,"bin/EyeWitness/EyeWitness.py"),filename,"--active-scan" if active else "",output_base,time.strftime("%m-%d-%y-%H-%M"))
-		os.system(EWHTTPSscriptIPS)
-		print("\a")
 
 
 	def insert_domain_todb(self):
 		f = open(output_base+"-unique.txt", "r")
 		for x in f:
 			print(x.strip())
-			if os.system("ping -c 1 " + x) is 0:
-				print(x.strip()+" is alive")
+			request = requests.get('http://'+x,timeout=(5,27))
+			if request.status_code == 200 or request.status_code == 301 or request.status_code == 302:
 				sql="INSERT INTO `{}` (`subdomain`,`is_alive`) VALUES ('{}',TRUE);".format(domain,x.rstrip("\n\r"))
 				cursor.execute(sql)
+				aquatone_cmd="""echo {} | aquatone -out /var/www/html/{}""".format(x,domain)
+				os.system(aquatone_cmd) 
+				# Check if this works else find another way
 				db.commit() 
 			else:
 				print(x.strip()+" is dead")
@@ -380,6 +360,6 @@ if __name__ == "__main__":
 	if zombie:
 		monitor_func=persistence_modules()
 		monitor_func.zombie()
-		# monitor_func.zombie_nmap()
+		
 
 
