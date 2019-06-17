@@ -66,6 +66,7 @@ def get_args():
     return parser.parse_args()
 class initialze_db:
 	def create_db(self):
+		# initializing databases and corresponding tables
 		try:
 			cursor.execute("CREATE DATABASE recon")
 			cursor.execute("CREATE DATABASE monitor")
@@ -74,10 +75,15 @@ class initialze_db:
 			print(colored("Creating monitor Table"))
 			cursor.execute("CREATE TABLE `monitor` (`id` INT(255) NOT NULL AUTO_INCREMENT PRIMARY KEY,`domain` VARCHAR(150) NOT NULL);")
 			print(colored("Monitor Table Created","green"))
-			print(colored("Sending Sample message to Slack Bot"))
-			slack.chat.post_message("#recon","```This is a Test ```")
 		except:
-			print(colored("\nDatabase Already Exists Kindly Check it manually","red"))
+			print(colored("\nDatabase Already Exists, kindly check it manually","red"))
+
+		# initializing and verifying slack configuration
+		try:
+			print(colored("Sending Sample message to Slack Bot"))
+			slack.chat.post_message("#recon","```Hi, I am ReconBot! ```")
+		except:
+			print(colored("\nThere is something wrong with the Slack configuration, kindly check your Slack token in config.json file","red"))
 
 class persistence_modules:
 	def monitor(self,wildcard=True):
