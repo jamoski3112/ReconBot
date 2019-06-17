@@ -1,6 +1,7 @@
 termcolor
 slacker
 psycopg2
+tld
 alembic==1.0.10
 aniso8601==6.0.0
 asn1crypto==0.24.0
