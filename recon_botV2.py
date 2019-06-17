@@ -21,7 +21,7 @@ slack = Slacker('Slack Token')
 db = pymysql.connect(host = "localhost",user = "root",passwd = "")
 cursor = db.cursor()
 # -----------------#
-
+aquatone_path=""
 newpath = r'output'
 if not os.path.exists(newpath):
     os.makedirs(newpath)
@@ -127,7 +127,7 @@ class persistence_modules:
 						if response.status_code == 200 or response.status_code == 301 or response.status_code == 302:
 							sql="""UPDATE `%s` SET `is_alive` = True WHERE `subdomain` = '%s' ;"""%(domain_name,subdomain_name)
 							cursor.execute(sql)
-							aquatone="""echo {} | aquatone -out /var/www/html/{}""".format(subdomain_name,domain_name)
+							aquatone="""echo {} | aquatone -out {}{}""".format(subdomain_name,aquatone_path,domain_name)
 							os.system(aquatone)
 						else :
 							pass
@@ -304,7 +304,7 @@ class recon:
 			if request.status_code == 200 or request.status_code == 301 or request.status_code == 302:
 				sql="INSERT INTO `{}` (`subdomain`,`is_alive`) VALUES ('{}',TRUE);".format(domain,x.rstrip("\n\r"))
 				cursor.execute(sql)
-				aquatone_cmd="""echo {} | aquatone -out /var/www/html/{}""".format(x,domain)
+				aquatone_cmd="""echo {} | aquatone -out {}{}""".format(x,aquatone_path,domain)
 				os.system(aquatone_cmd) 
 				# Check if this works else find another way
 				db.commit() 
