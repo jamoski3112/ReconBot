@@ -160,7 +160,7 @@ class recon:
 	def amass(self):
 	    print("\n\n\033[1;31mRunning Amass \n\033[1;37m")
 	    AmassFileName = "{}_amass.txt".format(output_base)
-	    amasscmd = "amass -d {} -o {}".format(domain,AmassFileName)
+	    amasscmd = "amass enum -d {} -o {}".format(domain,AmassFileName)
 	    print("\n\033[1;31mRunning Command: \033[1;37m{}".format(amasscmd))
 	    os.system(amasscmd)
 	    print("\n\033[1;31mAmass Complete\033[1;37m")
