@@ -14,6 +14,14 @@ def installTools():
     print("Installing")
     goInstall=("sudo apt install -y golang")
     os.system(goInstall)
+
+    # ============================== PostgreSQL (for psycopg2) =================================
+    print("\n\033[1;31mInstalling PostgreSQL for psycopg2 module support \033[1;37m")
+    # for psycopg2 module support
+    pgsqlInstallReq = ("sudo apt install -y postgresql-server-dev-all")
+    os.system(pgsqlInstallReq)
+
+    print("PostgreSQL Installed")
     
     # ============================== Amass =================================
     print("\n\033[1;31mInstalling Amass \033[1;37m")
