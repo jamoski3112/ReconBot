@@ -17,8 +17,20 @@ from requests.exceptions import HTTPError
 urllib3.disable_warnings()
 # Mysql Connection
 import pymysql
-slack = Slacker('Slack Token')
-db = pymysql.connect(host = "localhost",user = "root",passwd = "")
+
+# reading config data from json and converting it to python object
+config = json.loads(open('config.json').read())
+
+# configuring slack token
+slack_token = config['slack']['token']
+slack = Slacker(slack_token)
+
+# establishing database connection
+db_host = config['database']['host']
+db_username = config['database']['username']
+db_password = config['database']['password']
+db = pymysql.connect(host = db_host, user = db_username, passwd = db_password)
+
 cursor = db.cursor()
 # -----------------#
 aquatone_path=""
@@ -360,6 +372,3 @@ if __name__ == "__main__":
 	if zombie:
 		monitor_func=persistence_modules()
 		monitor_func.zombie()
-		
-
-
