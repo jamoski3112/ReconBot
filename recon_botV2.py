@@ -33,7 +33,7 @@ db = pymysql.connect(host = db_host, user = db_username, passwd = db_password)
 
 cursor = db.cursor()
 # -----------------#
-aquatone_path=""
+aquatone_path=config['aquatone_path']['path']
 newpath = r'output'
 if not os.path.exists(newpath):
     os.makedirs(newpath)

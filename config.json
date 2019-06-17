@@ -6,5 +6,8 @@
 	},
 	"slack": {
 		"token": ""
+	},
+	"aquatone_path": {
+		"path": ""
 	}
 }
