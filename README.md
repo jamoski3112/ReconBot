@@ -22,7 +22,17 @@ Generally domains extracted from crt.sh maynot resolve using Zombie module it pe
 
 Usage
 
-    RELEASING SOON
+    python recon.py --init 
+    #Creates nessary database & Sends sample Slack message
+
+    python recon.py -d example.com
+    #Starting Recon
+    
+    python recon.py --monitor
+    #Starting Monitor Module which fetches domain names from crt.sh (SET THIS MODULE AS CRON )
+    
+    python recon.py --zombie
+    #Wake up the Zombie and awaken the dead (SET THIS MODULE AS CRON )
    Slack Bot Token is needed
 
 
@@ -32,7 +42,7 @@ Todo
  - [ ] Reliable Subdomain Takeover Scanner
  - [ ] Formatted Slack Output
  - [ ] BandWidth Optimization
- - [ ] Database Schema and Development
+ - [x] Database Schema and Development
 
 
  
