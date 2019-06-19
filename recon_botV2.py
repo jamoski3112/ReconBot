@@ -315,7 +315,7 @@ class recon:
 
 
 	def insert_domain_todb(self):
-		f = open(output_base+"-unique.txt", "r")
+		f = open(output_base+"-unique.txt", "r").strip()
 		for x in f:
 			print(x.strip())
 			try:
