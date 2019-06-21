@@ -315,11 +315,11 @@ class recon:
 
 
 	def insert_domain_todb(self):
-		f = open(output_base+"-unique.txt", "r").strip()
+		f = open(output_base+"-unique.txt", "r")
 		for x in f:
 			print(x.strip())
 			try:
-				request = requests.get('http://'+x,timeout=(5,27))
+				request = requests.get('http://'+x.strip(),timeout=(5,27))
 				if request.status_code == 200 or request.status_code == 301 or request.status_code == 302:
 					sql="INSERT INTO `{}` (`subdomain`,`is_alive`) VALUES ('{}',TRUE);".format(domain,x.rstrip("\n\r"))
 					cursor.execute(sql)
