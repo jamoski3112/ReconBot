@@ -321,7 +321,7 @@ class recon:
 			try:
 				request = requests.get('http://'+x.strip(),timeout=(5,27))
 				if request.status_code == 200 or request.status_code == 301 or request.status_code == 302:
-					sql="INSERT INTO `{}` (`subdomain`,`is_alive`) VALUES ('{}',TRUE);".format(domain,x.rstrip("\n\r"))
+					sql="INSERT IGNORE INTO `{}` (`subdomain`,`is_alive`) VALUES ('{}',TRUE);".format(domain,x.rstrip("\n\r"))
 					cursor.execute(sql)
 					aquatone_cmd="""echo {} | aquatone -out {}{}""".format(x.strip(),aquatone_path,domain)
 					os.system(aquatone_cmd) 
@@ -329,7 +329,7 @@ class recon:
 					db.commit() 
 				else:
 					print(x.strip()+" is dead")
-					sql="INSERT INTO `{}` (`subdomain`,`is_alive`) VALUES ('{}',FALSE);".format(domain,x.rstrip("\n\r"))
+					sql="INSERT IGNORE INTO `{}` (`subdomain`,`is_alive`) VALUES ('{}',FALSE);".format(domain,x.rstrip("\n\r"))
 					cursor.execute(sql)
 					db.commit()
 			except requests.exceptions.Timeout:
