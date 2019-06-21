@@ -323,7 +323,7 @@ class recon:
 				if request.status_code == 200 or request.status_code == 301 or request.status_code == 302:
 					sql="INSERT INTO `{}` (`subdomain`,`is_alive`) VALUES ('{}',TRUE);".format(domain,x.rstrip("\n\r"))
 					cursor.execute(sql)
-					aquatone_cmd="""echo {} | aquatone -out {}{}""".format(x,aquatone_path,domain)
+					aquatone_cmd="""echo {} | aquatone -out {}{}""".format(x.strip(),aquatone_path,domain)
 					os.system(aquatone_cmd) 
 				# Check if this works else find another way
 					db.commit() 
