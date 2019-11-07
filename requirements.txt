@@ -129,7 +129,7 @@ Twisted==17.9.0
 txsocksx==0.0.0
 urllib3==1.25.2
 virtualenv==15.1.0
-Werkzeug==0.15.2
+Werkzeug==0.15.3
 wxPython==3.0.2.0
 wxPython-common==3.0.2.0
 zope.interface==4.6.0
