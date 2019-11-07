@@ -44,5 +44,8 @@ Todo
  - [ ] BandWidth Optimization
  - [x] Database Schema and Development
 
+#please note that this is a project still in progress some modules may not work as according..Also do contribute to this repo....
+
+PEACE
 
  
