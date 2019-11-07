@@ -44,6 +44,10 @@ Todo
  - [ ] BandWidth Optimization
  - [x] Database Schema and Development
 
+## Support
+If you appreciate my work and wish to support it, feel free to: <a href="https://www.buymeacoffee.com/vZ4kEm9"><img src="https://cdn-images-1.medium.com/max/738/1*G95uyokAH4JC5Ppvx4LmoQ@2x.png" width="150"></a>
+
+
 # Please note that this is a project still in progress some modules may not work as according..Also do contribute to this repo....
 
 PEACE
