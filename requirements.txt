@@ -86,7 +86,7 @@ passlib==1.7.1
 pathlib2==2.3.2
 Pillow==6.2.0
 post==2019.4.13
-psutil==5.6.1
+psutil==5.6.6
 public==2019.4.13
 pyasn1==0.4.2
 pyasn1-modules==0.2.1
