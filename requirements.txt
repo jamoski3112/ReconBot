@@ -127,7 +127,7 @@ torbrowser-launcher==0.2.9
 tornado==6.0.2
 Twisted==19.7.0
 txsocksx==0.0.0
-urllib3==1.25.2
+urllib3==1.25.8
 virtualenv==15.1.0
 Werkzeug==0.15.3
 wxPython==3.0.2.0
