@@ -30,7 +30,7 @@ dataset==1.1.0
 datashape==0.5.2
 DateTime==4.3
 decorator==4.4.0
-Django==1.11.23
+Django==2.2.24
 dnspython==1.16.0
 docutils==0.14
 EditorConfig==0.12.2
