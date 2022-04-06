@@ -125,7 +125,7 @@ SQLAlchemy-Utils==0.33.11
 toolz==0.9.0
 torbrowser-launcher==0.2.9
 tornado==6.0.2
-Twisted==19.7.0
+Twisted==22.2.0
 txsocksx==0.0.0
 urllib3==1.25.2
 virtualenv==15.1.0
