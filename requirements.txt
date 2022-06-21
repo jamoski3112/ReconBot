@@ -76,7 +76,7 @@ multipledispatch==0.6.0
 netaddr==0.7.19
 networkx==2.2
 normality==0.6.1
-numpy==1.16.2
+numpy==1.22.0
 odo==0.5.0
 olefile==0.45.1
 PAM==0.4.2
