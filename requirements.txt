@@ -67,7 +67,7 @@ JSParser==1.0
 keyring==10.6.0
 keyrings.alt==3.0
 knockpy==4.1
-Mako==1.0.9
+Mako==1.2.2
 MarkupSafe==1.1.1
 marshmallow==2.19.2
 marshmallow-sqlalchemy==0.15.0
