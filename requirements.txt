@@ -16,7 +16,7 @@ beautifulsoup4==4.7.1
 blaze==0.10.1
 boto3==1.9.39
 botocore==1.12.145
-certifi==2019.3.9
+certifi==2022.12.7
 cffi==1.12.3
 chardet==3.0.4
 Click==7.0
